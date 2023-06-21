@@ -1,8 +1,12 @@
 import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../../../store/cart-slice';
 import Input from '../../UI/Input';
 import classes from './MealItemForm.module.css';
 
 const MealItemForm = (props) => {
+    const dispatch = useDispatch();
+    
     const amountInputRef = useRef();
     const [amountIsValid, setAmountIsValid] = useState(true);
 
@@ -12,7 +16,7 @@ const MealItemForm = (props) => {
         const enteredAmount = amountInputRef.current.value;
         const enteredAmountNumber = +enteredAmount;
 
-        if(
+        if (
             enteredAmount.trim().length === 0 ||
             enteredAmountNumber < 1 ||
             enteredAmountNumber > 5
@@ -21,13 +25,18 @@ const MealItemForm = (props) => {
             return;
         }
 
-        props.onAddToCart(enteredAmountNumber);
+        dispatch(cartActions.addItemToCart({
+            id: props.id,
+            name: props.name,
+            quantity: enteredAmountNumber,
+            price: props.price
+        }));        
     };
 
     return (
         <form className={classes.form} onSubmit={submitHandler}>
             <Input
-                ref={amountInputRef} 
+                ref={amountInputRef}
                 label="Amount"
                 input={{
                     id: 'amount_' + props.id,

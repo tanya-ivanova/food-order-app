@@ -1,21 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CartIcon from '../Cart/CartIcon';
 import classes from './HeaderCartButton.module.css';
-import CartContext from '../../store/cart-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { uiActions } from '../../store/ui-slice';
 
 const HeaderCartButton = (props) => {
-    const [buttonIsHighlighted, setButtonIsHighlighted] = useState(false);
+    const dispatch = useDispatch();
 
-    const cartCtx = useContext(CartContext);
-    const {items} = cartCtx;
-    const numberOfCartItems = items.reduce((currentNum, item) => {
-        return currentNum + item.amount;
-    }, 0);
+    const cartQuantity = useSelector(state => state.cart.totalQuantity);
+    const cartItems = useSelector(state => state.cart.items);
+
+    const [buttonIsHighlighted, setButtonIsHighlighted] = useState(false);    
 
     const btnClasses = `${classes.button} ${buttonIsHighlighted ? classes.bump : ''}`;
 
     useEffect(() => {
-        if(items.length === 0) {
+        if(cartItems.length === 0) {
             return;
         }
         setButtonIsHighlighted(true);
@@ -27,15 +27,19 @@ const HeaderCartButton = (props) => {
         return () => {
             clearTimeout(timer);
         };
-    }, [items]);
+    }, [cartItems]);
+
+    const toggleCartHandler = () => {
+        dispatch(uiActions.toggle());
+    };
 
     return (
-        <button className={btnClasses} onClick={props.onClick}>
+        <button className={btnClasses} onClick={toggleCartHandler}>
             <span className={classes.icon}>
                 <CartIcon />
             </span>
             <span>Your Cart</span>
-            <span className={classes.badge}>{numberOfCartItems}</span>
+            <span className={classes.badge}>{cartQuantity}</span>
         </button>
     );
 };
