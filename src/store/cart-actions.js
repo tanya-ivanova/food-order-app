@@ -4,7 +4,7 @@ import { uiActions } from './ui-slice';
 export const fetchCartData = () => {
     return async (dispatch) => {
         const fetchData = async() => {
-            const response = await fetch('https://udemy-react-http-9ba98-default-rtdb.europe-west1.firebasedatabase.app/cart.json');
+            const response = await fetch('https://food-order-app-68942-default-rtdb.europe-west1.firebasedatabase.app/cart.json');
             if (!response.ok) {
                 throw new Error('Could not fetch cart data');
             }
@@ -17,7 +17,8 @@ export const fetchCartData = () => {
             const cartData = await fetchData();
             dispatch(cartActions.replaceCart({
                 items: cartData.items || [],
-                totalQuantity: cartData.totalQuantity
+                totalQuantity: cartData.totalQuantity,
+                totalAmount: cartData.totalAmount
             }));
         } catch (error) {
             dispatch(uiActions.showNotification({
@@ -38,11 +39,12 @@ export const sendCartData = (cart) => {
         }));
 
         const sendRequest = async () => {
-            const response = await fetch('https://udemy-react-http-9ba98-default-rtdb.europe-west1.firebasedatabase.app/cart.json', {
+            const response = await fetch('https://food-order-app-68942-default-rtdb.europe-west1.firebasedatabase.app/cart.json', {
                 method: 'PUT',
                 body: JSON.stringify({
                     items: cart.items,
-                    totalQuantity: cart.totalQuantity
+                    totalQuantity: cart.totalQuantity,
+                    totalAmount: cart.totalAmount
                 })
             });
 
