@@ -12,7 +12,7 @@ const Cart = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [didSubmit, setDidSubmit] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
   const cartItems = useSelector(state => state.cart.items);
   const totalAmount = useSelector(state => state.cart.totalAmount);  
 
@@ -36,7 +36,7 @@ const Cart = props => {
 
     setIsSubmitting(false);
     setDidSubmit(true);
-    dispatch(cartActions.clearCart());
+    dispatch(cartActions.clearCart());    
   };
 
   const toggleCartHandler = () => {

@@ -13,6 +13,7 @@ const cartSlice = createSlice({
             state.totalQuantity = 0;
             state.totalAmount = 0;
             state.items = [];
+            state.changed = true;
         },
         replaceCart(state, action) {
             state.totalQuantity = action.payload.totalQuantity;
